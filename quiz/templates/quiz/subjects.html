@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UzTest PRO | Boshqaruv Paneli</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-deep: #030712; 
+            --primary: #6366f1; 
+            --secondary: #0ea5e9;
+            --accent: #f43f5e;
+            --glass: rgba(17, 24, 39, 0.7);
+            --border: rgba(255, 255, 255, 0.06);
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+            --font-heading: 'Space Grotesk', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            font-family: var(--font-main);
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 100% 100%, rgba(14, 165, 233, 0.1) 0%, transparent 40%);
+            line-height: 1.5;
+        }
+
+        /* NAVIGATION */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 6%;
+            background: rgba(3, 7, 18, 0.8);
+            backdrop-filter: blur(25px);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo span {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-actions { display: flex; align-items: center; gap: 15px; }
+
+        .pill-btn {
+            padding: 10px 24px;
+            border-radius: 100px;
+            font-weight: 700;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-decoration: none;
+            transition: 0.3s;
+            border: 1px solid transparent;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-ghost { background: rgba(255, 255, 255, 0.05); color: #fff; border-color: var(--border); }
+        .btn-ghost:hover { background: rgba(255, 255, 255, 0.1); border-color: var(--primary); }
+
+        .profile-oval {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 5px 6px 5px 20px;
+            border-radius: 100px;
+            border: 1px solid var(--border);
+            cursor: pointer;
+        }
+
+        .power-icon {
+            width: 32px; height: 32px;
+            background: rgba(244, 63, 94, 0.1);
+            color: var(--accent);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        /* MAIN CONTENT */
+        .container { max-width: 1300px; margin: 60px auto; padding: 0 40px; }
+
+        .welcome-head h1 {
+            font-family: var(--font-heading);
+            font-size: 3.2rem;
+            font-weight: 700;
+            background: linear-gradient(to bottom, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .welcome-head p { color: var(--text-dim); margin-bottom: 50px; }
+
+        /* GRID & CARDS */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 35px;
+            padding: 40px;
+            transition: 0.4s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+        }
+
+        .card-title {
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            color: white;
+        }
+
+        .action-stack { display: flex; flex-direction: column; gap: 12px; }
+
+        .action-pill {
+            padding: 16px;
+            border-radius: 100px;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+
+        .pill-white { background: #fff; color: #000; }
+        .pill-white:hover { background: #e2e8f0; transform: scale(1.02); }
+        
+        .pill-outline { border: 1px solid var(--border); color: #fff; }
+        .pill-outline:hover { background: rgba(255,255,255,0.05); border-color: var(--secondary); }
+
+        .card-info {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-dim);
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        /* MODAL */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(10px);
+            display: none;
+            justify-content: center; align-items: center;
+            z-index: 2000;
+        }
+
+        .modal-box {
+            background: #0f172a;
+            border: 1px solid var(--border);
+            padding: 40px;
+            border-radius: 30px;
+            text-align: center;
+            width: 90%; max-width: 400px;
+        }
+
+        .m-btns { display: flex; gap: 15px; margin-top: 25px; }
+        .m-pill { flex: 1; padding: 14px; border-radius: 100px; border: none; font-weight: 700; cursor: pointer; text-decoration: none; }
+        .m-no { background: rgba(255,255,255,0.05); color: #fff; }
+        .m-yes { background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; }
+
+        footer { text-align: center; padding: 60px 0; color: #475569; font-size: 0.7rem; font-weight: 700; letter-spacing: 2px; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="/" class="logo"><i class="fas fa-shield-halved"></i> UZTEST<span>PRO</span></a>
+        
+        <div class="nav-actions">
+            {% if user.is_staff %}
+                <a href="{% url 'upload_questions' %}" class="pill-btn btn-ghost"><i class="fas fa-plus"></i> Savol Qo'shish</a>
+            {% endif %}
+            
+            <a href="{% url 'dashboard' %}" class="pill-btn btn-ghost">Natijalarim</a>
+
+            <div class="profile-oval" onclick="toggleExit(true)">
+                <span style="font-size: 0.85rem; font-weight: 700;">{{ user.username }}</span>
+                <div class="power-icon"><i class="fas fa-power-off"></i></div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="welcome-head">
+            <p style="color: var(--primary); font-weight: 800; font-size: 0.75rem; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 12px;">Premier Dashboard</p>
+            <h1>Xush kelibsiz, {{ user.username }}</h1>
+            <p>Bugungi nazorat jarayonlarini boshqarish uchun fanni tanlang.</p>
+        </div>
+
+        <div class="grid">
+            {% for subject in subjects %}
+            <div class="card">
+                <div>
+                    <div class="card-title">{{ subject.name }}</div>
+                    <div class="action-stack">
+                        {# BSB Tekshiruvi #}
+                        {% if not subject.user_has_bsb %}
+                            <a href="{% url 'test_process' subject.id 'BSB' %}" class="action-pill pill-white">BSB Testini Boshlash</a>
+                        {% else %}
+                            <div class="action-pill pill-outline" style="opacity: 0.5; cursor: not-allowed;"><i class="fas fa-check"></i> BSB Topshirilgan</div>
+                        {% endif %}
+
+                        {# CHSB Tekshiruvi #}
+                        {% if not subject.user_has_chsb %}
+                            <a href="{% url 'test_process' subject.id 'CHSB' %}" class="action-pill pill-outline">CHSB Testini Boshlash</a>
+                        {% else %}
+                            <div class="action-pill pill-outline" style="opacity: 0.5; cursor: not-allowed;"><i class="fas fa-check"></i> CHSB Topshirilgan</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="card-info">
+                    <span><i class="far fa-clock"></i> 60 MINUT</span>
+                    <span><i class="far fa-copy"></i> SAVOLLAR</span>
+                </div>
+            </div>
+            {% empty %}
+            <p style="color: var(--text-dim);">Hozircha fanlar mavjud emas.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="exitModal">
+        <div class="modal-box">
+            <i class="fas fa-sign-out-alt" style="font-size: 2.5rem; color: var(--accent); margin-bottom: 20px;"></i>
+            <h2 style="color: white; margin-bottom: 10px;">Tizimdan chiqish</h2>
+            <p style="color: var(--text-dim);">Haqiqatan ham chiqib ketmoqchimisiz?</p>
+            <div class="m-btns">
+                <button class="m-pill m-no" onclick="toggleExit(false)">BEKOR QILISH</button>
+                <a href="{% url 'logout' %}" class="m-pill m-yes">HA, CHIQISH</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2026 UZTEST PREMIER INFRASTRUCTURE &bull; BUILT BY YAHYOBEK
+    </footer>
+
+    <script>
+        function toggleExit(show) {
+            const modal = document.getElementById('exitModal');
+            modal.style.display = show ? 'flex' : 'none';
+        }
+
+        // Modal tashqarisiga bosganda yopish
+        window.onclick = function(event) {
+            const modal = document.getElementById('exitModal');
+            if (event.target == modal) {
+                toggleExit(false);
+            }
+        }
+    </script>
+</body>
+</html>

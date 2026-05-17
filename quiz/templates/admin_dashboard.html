@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel | e-Maktab PRO</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --primary: #6366f1;
+            --secondary: #06b6d4;
+            --accent: #f43f5e;
+            --success: #10b981;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-heavy: rgba(255, 255, 255, 0.07);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-glow: 0 0 15px rgba(99, 102, 241, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-dark);
+            color: #f1f5f9;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* --- DINAMIK FON --- */
+        .bg-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 50% 50%, #1e293b 0%, #0f172a 100%);
+        }
+
+        .orb {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.1;
+            animation: floatOrb 20s infinite alternate;
+        }
+
+        @keyframes floatOrb {
+            from { transform: translate(-10%, -10%) scale(1); }
+            to { transform: translate(20%, 20%) scale(1.2); }
+        }
+
+        /* --- NAVIGATSIYA --- */
+        nav {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(15px);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .btn-back {
+            text-decoration: none;
+            color: #fff;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            border-radius: 50px;
+            background: var(--glass-heavy);
+            border: 1px solid var(--glass-border);
+        }
+
+        .btn-back:hover {
+            background: var(--primary);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+            transform: translateX(-5px);
+        }
+
+        /* --- ASOSIY KONTENT --- */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .page-header h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            background: linear-gradient(to right, #fff, var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        /* --- ADMIN GRID --- */
+        .admin-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+        }
+
+        .card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            border-color: var(--primary);
+            background: var(--glass-heavy);
+            transform: translateY(-5px);
+        }
+
+        .card-full { grid-column: 1 / -1; }
+
+        .card-header {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--secondary);
+        }
+
+        /* --- FORMA ELEMENTLARI --- */
+        .form-group { margin-bottom: 20px; }
+        
+        label { 
+            display: block; 
+            font-size: 0.85rem; 
+            font-weight: 600; 
+            margin-bottom: 8px; 
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 14px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: #fff;
+            font-family: inherit;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.2);
+        }
+
+        /* --- TUGMALAR --- */
+        .btn {
+            border: none;
+            padding: 15px;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary { background: linear-gradient(45deg, var(--primary), #4f46e5); color: white; }
+        .btn-success { background: linear-gradient(45deg, var(--success), #059669); color: white; }
+        .btn-info { background: linear-gradient(45deg, var(--secondary), #0891b2); color: white; }
+
+        .btn:hover {
+            transform: scale(1.02);
+            filter: brightness(1.1);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        /* --- FILE UPLOAD --- */
+        .file-upload-box {
+            border: 2px dashed var(--glass-border);
+            padding: 40px;
+            text-align: center;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.02);
+            cursor: pointer;
+        }
+
+        .file-upload-box:hover {
+            border-color: var(--secondary);
+            background: rgba(6, 182, 212, 0.05);
+        }
+
+        /* --- JADVAL --- */
+        .table-container { 
+            overflow-x: auto; 
+            margin-top: 15px;
+            border-radius: 15px;
+        }
+
+        table { width: 100%; border-collapse: collapse; }
+        
+        th { 
+            background: rgba(255,255,255,0.05); 
+            padding: 18px; 
+            text-align: left; 
+            color: var(--secondary); 
+            font-size: 0.9rem;
+        }
+
+        td { 
+            padding: 18px; 
+            border-bottom: 1px solid var(--glass-border); 
+            font-size: 0.95rem;
+        }
+
+        tr:hover td { background: rgba(255,255,255,0.02); }
+
+        .badge {
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            background: var(--glass-heavy);
+        }
+
+        /* --- ALERT --- */
+        .alert {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success);
+            color: var(--success);
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: 700;
+            backdrop-filter: blur(10px);
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @media (max-width: 900px) {
+            .admin-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow">
+        <div class="orb" style="background: var(--primary); top: 10%; left: 10%;"></div>
+        <div class="orb" style="background: var(--accent); bottom: 10%; right: 10%; animation-delay: -5s;"></div>
+    </div>
+
+    <nav>
+        <a href="{% url 'subjects' %}" class="btn-back">
+            <i class="fas fa-arrow-left"></i> Orqaga
+        </a>
+        <div style="font-family: 'Space Grotesk'; font-weight: 700; font-size: 1.4rem;">
+            e-Maktab <span style="color: var(--secondary)">ADMIN</span>
+        </div>
+        <div class="badge" style="border: 1px solid var(--primary)">
+            <i class="fas fa-user-shield"></i> {{ user.username }}
+        </div>
+    </nav>
+
+    <div class="container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert">
+                    <i class="fas fa-check-circle"></i> {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="page-header">
+            <h1>Tizimni Boshqarish</h1>
+            <p style="color: #94a3b8; font-size: 1.1rem;">Ma'lumotlar bazasini real-vaqt rejimida yangilang va savollarni nazorat qiling</p>
+        </div>
+
+        <div class="admin-grid">
+            
+            <!-- 1. FAN QO'SHISH -->
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-folder-plus"></i> Yangi Fan Qo'shish
+                </div>
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="upload_type" value="add_subject">
+                    <div class="form-group">
+                        <label>Fan nomi</label>
+                        <input type="text" name="subject_name" placeholder="Masalan: Fizika" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Tavsif (ixtiyoriy)</label>
+                        <input type="text" name="description" placeholder="Sinf yoki yo'nalish...">
+                    </div>
+                    <button type="submit" class="btn btn-info">
+                        <i class="fas fa-save"></i> Bazaga Qo'shish
+                    </button>
+                </form>
+            </div>
+
+            <!-- 2. EXCEL YUKLASH -->
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-file-excel"></i> Excel Import
+                </div>
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" name="upload_type" value="excel">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="form-group">
+                            <label>Fan</label>
+                            <select name="subject" required>
+                                {% for sub in subjects %}
+                                    <option value="{{ sub.id }}">{{ sub.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Turi</label>
+                            <select name="test_type_excel">
+                                <option value="BSB">BSB</option>
+                                <option value="CHSB">CHSB</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="file-upload-box" id="drop-zone" onclick="document.getElementById('excel_input').click()">
+                        <input type="file" name="excel_file" id="excel_input" accept=".xlsx" hidden required>
+                        <i class="fas fa-cloud-upload-alt fa-3x" style="color: var(--secondary); margin-bottom: 15px;"></i>
+                        <div id="file_name_display">Faylni tanlang (.xlsx)</div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="margin-top: 15px;">
+                        <i class="fas fa-upload"></i> Ma'lumotlarni Yuklash
+                    </button>
+                </form>
+            </div>
+
+            <!-- 3. MANUAL SAVOL -->
+            <div class="card card-full">
+                <div class="card-header">
+                    <i class="fas fa-keyboard"></i> Yakka Tartibda Qo'shish
+                </div>
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="upload_type" value="manual">
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                        <div class="form-group">
+                            <label>Fan</label>
+                            <select name="subject" required>
+                                {% for sub in subjects %}
+                                    <option value="{{ sub.id }}">{{ sub.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Test Turi</label>
+                            <select name="test_type">
+                                <option value="BSB">BSB</option>
+                                <option value="CHSB">CHSB</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>To'g'ri Javob</label>
+                            <select name="correct_answer">
+                                <option value="a">A Varianti</option>
+                                <option value="b">B Varianti</option>
+                                <option value="c">C Varianti</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Savol Matni</label>
+                        <textarea name="text" rows="3" placeholder="Savolni batafsil kiriting..." required></textarea>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                        <input type="text" name="option_a" placeholder="A varianti" required>
+                        <input type="text" name="option_b" placeholder="B varianti" required>
+                        <input type="text" name="option_c" placeholder="C varianti" required>
+                    </div>
+                    <button type="submit" class="btn btn-success" style="margin-top: 25px;">
+                        <i class="fas fa-plus-circle"></i> Savolni Saqlash
+                    </button>
+                </form>
+            </div>
+
+            <!-- 4. JADVAL -->
+            <div class="card card-full" style="background: rgba(0,0,0,0.2)">
+                <div class="card-header" style="color: #fff">
+                    <i class="fas fa-list-ul"></i> So'nggi Qo'shilgan Savollar
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Fan</th>
+                                <th>Savol</th>
+                                <th>Javob</th>
+                                <th>Tur</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for q in questions %}
+                            <tr>
+                                <td><span class="badge" style="color: var(--secondary)">{{ q.subject.name }}</span></td>
+                                <td>{{ q.text|truncatechars:80 }}</td>
+                                <td><span class="badge" style="color: var(--success)">{{ q.correct_answer|upper }}</span></td>
+                                <td><strong style="color: var(--primary)">{{ q.test_type }}</strong></td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="4" style="text-align: center; padding: 40px; color: #64748b;">Hozircha savollar yo'q</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Excel fayl nomi ko'rsatish
+        const fileInput = document.getElementById('excel_input');
+        const display = document.getElementById('file_name_display');
+        
+        fileInput.addEventListener('change', function(e) {
+            if (this.files && this.files[0]) {
+                display.innerHTML = `<i class="fas fa-file-circle-check"></i> <span style="color: var(--secondary)">${this.files[0].name}</span>`;
+            }
+        });
+
+        // Mouse harakatiga qarab orqa fonni biroz qimirlatish
+        document.addEventListener('mousemove', (e) => {
+            const orbs = document.querySelectorAll('.orb');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            orbs.forEach((orb, i) => {
+                const shift = (i + 1) * 30;
+                orb.style.transform = `translate(${x * shift}px, ${y * shift}px)`;
+            });
+        });
+    </script>
+</body>
+</html>

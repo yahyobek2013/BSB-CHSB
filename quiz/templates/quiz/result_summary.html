@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Natija | UzTest PRO Elite</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-deep: #030712; 
+            --primary: #6366f1; 
+            --secondary: #0ea5e9;
+            --success: #10b981;
+            --danger: #f43f5e;
+            --glass: rgba(17, 24, 39, 0.8);
+            --border: rgba(255, 255, 255, 0.08);
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+            --font-heading: 'Space Grotesk', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            font-family: var(--font-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(16, 185, 129, 0.12) 0%, transparent 40%);
+            padding: 25px;
+        }
+
+        .result-card {
+            background: var(--glass);
+            backdrop-filter: blur(30px);
+            border: 1px solid var(--border);
+            width: 100%;
+            max-width: 650px;
+            padding: 50px 40px;
+            border-radius: 45px;
+            box-shadow: 0 50px 100px -20px rgba(0,0,0,0.6);
+            animation: cardEnter 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes cardEnter {
+            from { opacity: 0; transform: translateY(30px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 15px;
+        }
+
+        .dashboard-header h2 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #fff;
+            font-family: var(--font-heading);
+        }
+
+        .user-tag {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+        }
+
+        .user-tag strong { color: var(--secondary); }
+
+        .status-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 12px 30px;
+            border-radius: 100px;
+            font-weight: 800;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: 0.5s ease;
+        }
+
+        .status-passed { background: rgba(16, 185, 129, 0.1); color: var(--success); border: 1px solid var(--success); box-shadow: 0 0 20px rgba(16, 185, 129, 0.2); }
+        .status-failed { background: rgba(244, 63, 94, 0.1); color: var(--danger); border: 1px solid var(--danger); box-shadow: 0 0 20px rgba(244, 63, 94, 0.2); }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .stat-pill {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            border-radius: 25px;
+            padding: 25px 10px;
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        .stat-pill:hover { border-color: var(--primary); background: rgba(255, 255, 255, 0.05); transform: translateY(-5px); }
+
+        .stat-value { font-size: 2.2rem; font-weight: 700; display: block; font-family: var(--font-heading); margin-bottom: 5px; }
+        .stat-label { font-size: 0.65rem; color: var(--text-dim); letter-spacing: 2px; font-weight: 800; text-transform: uppercase; }
+
+        .c-green { color: var(--success); }
+        .c-red { color: var(--danger); }
+        .c-white { color: #fff; }
+
+        .score-display {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .score-display p { color: var(--text-dim); text-transform: uppercase; font-size: 0.8rem; letter-spacing: 3px; font-weight: 600; margin-bottom: 10px; }
+        .score-display h3 { font-size: 4.5rem; font-family: var(--font-heading); font-weight: 800; color: #fff; text-shadow: 0 0 30px rgba(99, 102, 241, 0.3); }
+
+        .btn-group { display: flex; flex-direction: column; gap: 15px; }
+
+        .pill-btn {
+            padding: 18px;
+            border-radius: 100px;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            transition: 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary { background: #fff; color: #000; }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(255,255,255,0.15); background: var(--secondary); color: #fff; }
+        
+        .btn-outline { background: rgba(255,255,255,0.05); color: #fff; border: 1px solid var(--border); }
+        .btn-outline:hover { background: rgba(255,255,255,0.1); border-color: var(--primary); }
+    </style>
+</head>
+<body>
+
+<div class="result-card">
+    <div class="dashboard-header">
+        <h2>Mening natijalarim</h2>
+        <div class="user-tag">Foydalanuvchi: <strong>yahyobek</strong></div>
+    </div>
+
+    <div class="status-container">
+        <div id="status-badge" class="status-badge">Natija hisoblanmoqda...</div>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-pill">
+            <span class="stat-value c-green">{{ result.correct_count }}</span>
+            <span class="stat-label">TO'G'RI</span>
+        </div>
+        <div class="stat-pill">
+            <span class="stat-value c-red">{{ result.wrong_count }}</span>
+            <span class="stat-label">XATO</span>
+        </div>
+        <div class="stat-pill">
+            <span class="stat-value c-white">{{ result.total_questions }}</span>
+            <span class="stat-label">JAMI</span>
+        </div>
+    </div>
+
+    <div class="score-display">
+        <p>O'rtacha o'zlashtirish</p>
+        <h3 id="score-val">{{ result.score_percentage }}%</h3>
+    </div>
+
+    <div class="btn-group">
+        <a href="{% url 'dashboard' %}" class="pill-btn btn-primary">
+            <i class="fas fa-chart-line"></i> Dashboardga qaytish
+        </a>
+        <a href="{% url 'subjects' %}" class="pill-btn btn-outline">
+            <i class="fas fa-redo"></i> Yangi test boshlash
+        </a>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Foizni aniqlash va formatlash
+        const scoreElement = document.getElementById('score-val');
+        const scoreText = scoreElement.innerText;
+        // % belgisini olib tashlab, raqamga aylantirish
+        const score = parseFloat(scoreText.replace('%', '').replace(',', '.'));
+        const badge = document.getElementById('status-badge');
+
+        // Dinamik effekt: 60% dan baland bo'lsa o'tgan hisoblanadi
+        setTimeout(() => {
+            if (score >= 60) {
+                badge.innerText = "MUVAFFAQIYATLI: O'TDINGIZ!";
+                badge.className = 'status-badge status-passed';
+            } else {
+                badge.innerText = "NATIJA: QONIQTIRARSIZ";
+                badge.className = 'status-badge status-failed';
+            }
+        }, 300);
+    });
+</script>
+
+</body>
+</html>

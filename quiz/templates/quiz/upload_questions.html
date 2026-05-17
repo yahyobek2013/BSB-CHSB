@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boshqaruv Paneli | e-Maktab PRO</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg: #030712;
+            --primary: #6366f1;
+            --secondary: #a855f7;
+            --accent: #00d2ff;
+            --success: #10b981;
+            --danger: #ef4444;
+            --card-bg: rgba(17, 24, 39, 0.7);
+            --border: rgba(255, 255, 255, 0.08);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background-color: var(--bg); color: var(--text-main); overflow-x: hidden; min-height: 100vh; line-height: 1.6; }
+
+        .mesh-gradient {
+            position: fixed; top: -10%; left: -10%; width: 120%; height: 120%; z-index: -1;
+            background: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+                        radial-gradient(at 100% 100%, rgba(168, 85, 247, 0.15) 0px, transparent 50%);
+            filter: blur(80px); pointer-events: none;
+        }
+
+        nav {
+            display: flex; justify-content: space-between; align-items: center; padding: 15px 6%;
+            background: rgba(3, 7, 18, 0.8); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border);
+            position: sticky; top: 0; z-index: 1000;
+        }
+
+        .btn-back {
+            text-decoration: none; color: var(--text-main); font-size: 0.9rem; font-weight: 600;
+            display: flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border); transition: var(--transition);
+        }
+        .btn-back:hover { background: var(--primary); transform: translateX(-5px); }
+
+        .admin-tag {
+            display: flex; align-items: center; gap: 10px; background: rgba(99, 102, 241, 0.1);
+            padding: 8px 20px; border-radius: 100px; border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+        .admin-tag span { font-weight: 800; background: linear-gradient(to right, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        .container { max-width: 1300px; margin: 40px auto; padding: 0 30px; }
+        .hero-section { text-align: center; margin-bottom: 50px; }
+        .hero-section h1 { font-family: 'Space Grotesk', sans-serif; font-size: 3rem; background: linear-gradient(to right, #fff, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        .admin-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 25px; }
+        .glass-card { background: var(--card-bg); backdrop-filter: blur(20px); border: 1px solid var(--border); border-radius: 24px; padding: 30px; opacity: 0; transform: translateY(30px); transition: var(--transition); }
+        .glass-card.reveal { opacity: 1; transform: translateY(0); }
+
+        .col-12 { grid-column: span 12; }
+        .col-6 { grid-column: span 6; }
+        
+        .card-header { display: flex; align-items: center; gap: 12px; font-size: 1.25rem; font-weight: 700; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 25px; }
+
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; font-weight: 600; }
+        input, select, textarea { width: 100%; padding: 14px 18px; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); border-radius: 14px; color: #fff; transition: var(--transition); font-size: 0.9rem; }
+        input:focus, select:focus, textarea:focus { border-color: var(--primary); outline: none; background: rgba(255, 255, 255, 0.07); }
+
+        .btn { width: 100%; padding: 16px; border-radius: 14px; border: none; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: var(--transition); }
+        .btn-primary { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; }
+        .btn-success { background: var(--success); color: white; }
+        .btn:hover { filter: brightness(1.1); transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+
+        .file-upload-box { border: 2px dashed var(--border); padding: 30px; text-align: center; border-radius: 20px; cursor: pointer; transition: var(--transition); margin-bottom: 15px; }
+        .file-upload-box.valid { border-color: var(--success); background: rgba(16, 185, 129, 0.05); }
+
+        .messages { list-style: none; margin-bottom: 20px; }
+        .messages li { padding: 12px 20px; border-radius: 10px; margin-bottom: 10px; font-weight: 600; animation: slideIn 0.5s ease; }
+        .success { background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid #10b981; }
+        .error { background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid #ef4444; }
+
+        @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+    </style>
+</head>
+<body>
+
+    <div class="mesh-gradient"></div>
+
+    <nav>
+        <a href="{% url 'subject_list' %}" class="btn-back">
+            <i class="fas fa-chevron-left"></i> Fanlar ro'yxati
+        </a>
+        <div class="admin-tag">
+            <i class="fas fa-crown" style="color: #fbbf24;"></i>
+            <span>YAHYOBEK</span>
+        </div>
+        <div style="font-size: 0.85rem; color: var(--text-muted);">Admin: <strong>{{ user.username }}</strong></div>
+    </nav>
+
+    <div class="container">
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        <div class="hero-section">
+            <h1>Boshqaruv Markazi</h1>
+            <p style="color: var(--text-muted);">Fanlar va savollarni professional boshqarish</p>
+        </div>
+
+        <div class="admin-grid">
+            
+            <div class="glass-card col-12">
+                <div class="card-header"><i class="fas fa-folder-plus"></i> Yangi Fan Qo'shish</div>
+                <form method="POST" style="display: grid; grid-template-columns: 1fr auto; gap: 20px; align-items: end;">
+                    {% csrf_token %}
+                    <input type="hidden" name="upload_type" value="add_subject">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label>Fanning to'liq nomi</label>
+                        <input type="text" name="subject_name" placeholder="Masalan: Ingliz tili 7-sinf" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 220px;">
+                        <i class="fas fa-save"></i> Fanni saqlash
+                    </button>
+                </form>
+            </div>
+
+            <div class="glass-card col-6">
+                <div class="card-header"><i class="fas fa-file-excel"></i> Excel orqali yuklash</div>
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" name="upload_type" value="excel">
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                        <div>
+                            <label>Qaysi fan uchun?</label>
+                            <select name="subject" required>
+                                <option value="" disabled selected>Tanlang...</option>
+                                {% for sub in subjects %}
+                                    <option value="{{ sub.id }}">{{ sub.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div>
+                            <label>Test turi</label>
+                            <select name="test_type" required>
+                                <option value="BSB">BSB (Baho nazorat)</option>
+                                <option value="CHSB">CHSB (Chorak nazorat)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="file-upload-box" id="dropZoneExcel">
+                        <input type="file" name="excel_file" id="excel_input" accept=".xlsx, .xls" hidden required>
+                        <i class="fas fa-file-circle-plus fa-3x" style="color: var(--primary); margin-bottom: 10px;"></i>
+                        <div id="file_name_display" style="font-size: 0.9rem; color: var(--text-muted);">
+                            Faylni tanlang (.xlsx)
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-cloud-arrow-up"></i> Exceldan import qilish
+                    </button>
+                </form>
+            </div>
+
+            <div class="glass-card col-6">
+                <div class="card-header"><i class="fas fa-keyboard"></i> Birma-bir qo'shish</div>
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="upload_type" value="manual">
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                        <div>
+                            <label>Fan</label>
+                            <select name="subject" required>
+                                <option value="" disabled selected>Fan tanlang...</option>
+                                {% for sub in subjects %}
+                                    <option value="{{ sub.id }}">{{ sub.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div>
+                            <label>Test turi</label>
+                            <select name="test_type" required>
+                                <option value="BSB">BSB</option>
+                                <option value="CHSB">CHSB</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Savol matni</label>
+                        <textarea name="text" rows="2" placeholder="Savolni kiriting..." required></textarea>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px;">
+                        <input type="text" name="option_a" placeholder="A variant" required>
+                        <input type="text" name="option_b" placeholder="B variant" required>
+                        <input type="text" name="option_c" placeholder="C variant" required>
+                        <select name="correct_answer" required>
+                            <option value="a">To'g'ri: A</option>
+                            <option value="b">To'g'ri: B</option>
+                            <option value="c">To'g'ri: C</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-check-circle"></i> Bazaga qo'shish
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Kartochkalar animatsiyasi
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.glass-card');
+            cards.forEach((card, index) => {
+                setTimeout(() => card.classList.add('reveal'), 120 * index);
+            });
+        });
+
+        // Excel yuklash logikasi
+        const dropZone = document.getElementById('dropZoneExcel');
+        const fileInput = document.getElementById('excel_input');
+        const fileDisplay = document.getElementById('file_name_display');
+
+        dropZone.addEventListener('click', () => fileInput.click());
+        
+        fileInput.addEventListener('change', (e) => {
+            if(e.target.files.length > 0) {
+                fileDisplay.innerHTML = `<b style="color:var(--success)">${e.target.files[0].name}</b> yuklashga tayyor`;
+                dropZone.classList.add('valid');
+            }
+        });
+
+        // Drag & Drop funksiyasi (ixtiyoriy, qulaylik uchun)
+        dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.style.borderColor = "var(--primary)"; });
+        dropZone.addEventListener('dragleave', () => { dropZone.style.borderColor = "var(--border)"; });
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            fileInput.files = e.dataTransfer.files;
+            fileDisplay.innerText = e.dataTransfer.files[0].name;
+            dropZone.classList.add('valid');
+        });
+    </script>
+</body>
+</html>

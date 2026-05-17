@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ subject.name }} | Test Jarayoni</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg: #030712;
+            --primary: #6366f1;
+            --secondary: #a855f7;
+            --accent: #00d2ff;
+            --card-bg: rgba(17, 24, 39, 0.7);
+            --border: rgba(255, 255, 255, 0.1);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --danger: #ef4444;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            min-height: 100vh;
+            background-image: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.1) 0px, transparent 50%),
+                              radial-gradient(at 100% 100%, rgba(168, 85, 247, 0.1) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        /* --- HEADER --- */
+        .quiz-header {
+            background: rgba(3, 7, 18, 0.85);
+            backdrop-filter: blur(20px);
+            padding: 15px 6%;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .subject-info { display: flex; flex-direction: column; }
+        .subject-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.2rem;
+            background: linear-gradient(to right, #fff, var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        .timer-box {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px 25px;
+            border-radius: 100px;
+            border: 2px solid var(--primary);
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: var(--primary);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.05);
+            position: fixed;
+            top: 75px;
+            left: 0;
+            z-index: 999;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            width: 0%;
+            transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 15px var(--accent);
+        }
+
+        /* --- TEST CARD --- */
+        .container { max-width: 800px; margin: 60px auto; padding: 0 20px; }
+
+        .question-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(15px);
+            padding: 30px;
+            border-radius: 24px;
+            border: 1px solid var(--border);
+            margin-bottom: 30px;
+            transition: 0.3s ease;
+            position: relative;
+        }
+
+        .question-card:hover { border-color: rgba(99, 102, 241, 0.4); transform: translateY(-2px); }
+
+        .question-num {
+            position: absolute;
+            left: -15px;
+            top: 25px;
+            background: var(--primary);
+            color: white;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            font-weight: 800;
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
+        }
+
+        .question-text {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            padding-left: 10px;
+            line-height: 1.6;
+        }
+
+        .options-list { display: flex; flex-direction: column; gap: 12px; }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            padding: 18px 22px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .option-item:hover { background: rgba(255, 255, 255, 0.08); border-color: var(--primary); }
+
+        .option-item input {
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            border: 2px solid var(--text-muted);
+            border-radius: 50%;
+            margin-right: 15px;
+            cursor: pointer;
+            position: relative;
+            transition: 0.2s;
+        }
+
+        .option-item input:checked {
+            border-color: var(--accent);
+            background: var(--accent);
+            box-shadow: 0 0 12px var(--accent);
+        }
+
+        .option-item span { font-weight: 500; font-size: 1rem; }
+
+        /* --- FOOTER --- */
+        .footer-actions { text-align: center; margin: 60px 0; }
+
+        .btn-submit {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px 50px;
+            border: none;
+            border-radius: 20px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.4s;
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-submit:hover { 
+            transform: translateY(-5px) scale(1.02); 
+            box-shadow: 0 15px 35px rgba(168, 85, 247, 0.4);
+            filter: brightness(1.1);
+        }
+
+        /* --- MODAL --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .modal-content {
+            background: #0f172a;
+            border: 1px solid var(--border);
+            padding: 40px;
+            border-radius: 32px;
+            text-align: center;
+            max-width: 480px;
+            width: 90%;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-title { font-size: 1.6rem; margin-bottom: 15px; font-weight: 800; color: #fff; }
+        .modal-text { color: var(--text-muted); margin-bottom: 30px; line-height: 1.6; }
+
+        .modal-btns { display: flex; gap: 15px; }
+        .modal-btn { flex: 1; padding: 16px; border-radius: 15px; border: none; font-weight: 700; cursor: pointer; transition: 0.3s; }
+        
+        .btn-cancel { background: rgba(255, 255, 255, 0.05); color: #fff; border: 1px solid var(--border); }
+        .btn-confirm { background: var(--primary); color: #fff; }
+
+        .btn-cancel:hover { background: var(--danger); border-color: var(--danger); }
+        .btn-confirm:hover { transform: scale(1.05); box-shadow: 0 0 20px var(--primary); }
+
+    </style>
+</head>
+<body>
+
+    <div class="quiz-header">
+        <div class="subject-info">
+            <div class="subject-title">{{ subject.name }}</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">{{ questions|length }} ta savol | A, B, C variantlar</div>
+        </div>
+        <div class="timer-box" id="quiz-timer">--:--</div>
+    </div>
+    
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <div class="container">
+        <form id="quizForm" action="{% url 'submit_quiz' subject.id %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="test_type" value="{{ test_type }}">
+
+            {% for question in questions %}
+            <div class="question-card">
+                <div class="question-num">{{ forloop.counter }}</div>
+                <div class="question-text">
+                    {{ question.text }}
+                </div>
+                <div class="options-list">
+                    <label class="option-item">
+                        <input type="radio" name="q{{ question.id }}" value="a" required>
+                        <span>A) {{ question.option_a }}</span>
+                    </label>
+                    <label class="option-item">
+                        <input type="radio" name="q{{ question.id }}" value="b">
+                        <span>B) {{ question.option_b }}</span>
+                    </label>
+                    <label class="option-item">
+                        <input type="radio" name="q{{ question.id }}" value="c">
+                        <span>C) {{ question.option_c }}</span>
+                    </label>
+                </div>
+            </div>
+            {% endfor %}
+
+            <div class="footer-actions">
+                <button type="button" class="btn-submit" onclick="showCustomModal()">
+                    <i class="fas fa-check-double" style="margin-right: 10px;"></i> Testni Yakunlash
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="modal-overlay" id="exitModal">
+        <div class="modal-content">
+            <div class="modal-title" id="modalTitle">Yakunlash</div>
+            <div class="modal-text" id="modalText">...</div>
+            <div class="modal-btns">
+                <button class="modal-btn btn-cancel" onclick="closeCustomModal()">QAYTISH</button>
+                <button class="modal-btn btn-confirm" onclick="submitForm()">TOPSHIRISH</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 1. TAYMER SOZLAMALARI
+        let totalSeconds = 3600; // 60 daqiqa
+        const timerElement = document.getElementById('quiz-timer');
+        
+        const countdown = setInterval(() => {
+            let mins = Math.floor(totalSeconds / 60);
+            let secs = totalSeconds % 60;
+            
+            timerElement.innerHTML = `${mins < 10 ? '0'+mins : mins}:${secs < 10 ? '0'+secs : secs}`;
+            
+            if (totalSeconds <= 300) { // Oxirgi 5 daqiqa
+                timerElement.style.borderColor = "var(--danger)";
+                timerElement.style.color = "var(--danger)";
+                timerElement.classList.add('animate-pulse');
+            }
+
+            if (totalSeconds <= 0) {
+                clearInterval(countdown);
+                submitForm(); // Vaqt tugasa avtomatik topshirish
+            }
+            totalSeconds--;
+        }, 1000);
+
+        // 2. PROGRESS VA VARIANTLARNI KONTROL QILISH
+        const totalQuestions = {{ questions|length }};
+        const progressBar = document.getElementById('progressBar');
+
+        document.querySelectorAll('input[type="radio"]').forEach(input => {
+            input.addEventListener('change', () => {
+                const checkedCount = document.querySelectorAll('input[type="radio"]:checked').length;
+                const percent = (checkedCount / totalQuestions) * 100;
+                progressBar.style.width = percent + '%';
+            });
+        });
+
+        // 3. MODAL FUNKSIYALARI
+        const modal = document.getElementById('exitModal');
+        
+        function showCustomModal() {
+            const checkedCount = document.querySelectorAll('input[type="radio"]:checked').length;
+            const modalTitle = document.getElementById('modalTitle');
+            const modalText = document.getElementById('modalText');
+
+            if (checkedCount < totalQuestions) {
+                modalTitle.innerText = "Diqqat!";
+                modalTitle.style.color = "var(--danger)";
+                modalText.innerText = `Siz hali ${totalQuestions - checkedCount} ta savolga javob bermadingiz. Shunda ham natijalarni yuboramizmi?`;
+            } else {
+                modalTitle.innerText = "Tayyormisiz?";
+                modalTitle.style.color = "var(--accent)";
+                modalText.innerText = "Barcha savollarga javob berildi. Natijalarni ko'rish uchun topshirishingiz mumkin.";
+            }
+            modal.style.display = 'flex';
+        }
+
+        function closeCustomModal() {
+            modal.style.display = 'none';
+        }
+
+        function submitForm() {
+            window.onbeforeunload = null; // Ogohlantirishni o'chirish
+            document.getElementById('quizForm').submit();
+        }
+
+        // 4. XAVFSIZLIK (Sahifani yangilashdan himoya)
+        window.onbeforeunload = function() {
+            return "Test jarayoni ketmoqda! Chiqib ketsangiz javoblar saqlanmasligi mumkin.";
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mening natijalarim | e-Maktab PRO</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --primary: #6366f1;
+            --secondary: #06b6d4;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --success: #10b981;
+            --danger: #f43f5e;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-dark);
+            color: #f1f5f9;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* --- DINAMIK FON (subjects.html kabi) --- */
+        .bg-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 50% 50%, #1e293b 0%, #0f172a 100%);
+        }
+
+        .orb {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.1;
+            animation: floatOrb 20s infinite alternate;
+        }
+
+        @keyframes floatOrb {
+            from { transform: translate(-10%, -10%) scale(1); }
+            to { transform: translate(20%, 20%) scale(1.2); }
+        }
+
+        /* --- Navigatsiya --- */
+        nav {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            padding: 15px 5%;
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo span {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 2px 10px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .btn-back {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            color: #fff !important;
+            padding: 10px 20px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-back:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            transform: translateX(-5px);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+        }
+
+        /* --- Konteyner --- */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .header-section {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            background: linear-gradient(to right, #fff, var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        /* --- Statistika Kartochkalari --- */
+        .stats-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            padding: 30px;
+            border-radius: 24px;
+            border: 1px solid var(--glass-border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .stat-card .number {
+            font-size: 42px;
+            font-weight: 800;
+            color: #fff;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .stat-card .label {
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .stat-card i {
+            position: absolute;
+            right: 20px;
+            bottom: 20px;
+            font-size: 50px;
+            opacity: 0.1;
+            color: var(--secondary);
+        }
+
+        /* --- Natijalar Jadvali --- */
+        .results-table-container {
+            background: var(--glass);
+            backdrop-filter: blur(25px);
+            border-radius: 30px;
+            border: 1px solid var(--glass-border);
+            padding: 20px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        th {
+            text-align: left;
+            padding: 20px;
+            color: var(--text-muted);
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        td {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .badge {
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .badge-success { background: rgba(16, 185, 129, 0.1); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.2); }
+        .badge-danger { background: rgba(244, 63, 94, 0.1); color: var(--danger); border: 1px solid rgba(244, 63, 94, 0.2); }
+        .badge-info { background: rgba(99, 102, 241, 0.1); color: var(--primary); border: 1px solid rgba(99, 102, 241, 0.2); }
+
+        .progress-mini {
+            width: 100px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            border-radius: 10px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 60px;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-dark); }
+        ::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow">
+        <div class="orb" style="background: var(--primary); top: 0; left: 0;"></div>
+        <div class="orb" style="background: var(--secondary); bottom: 0; right: 0;"></div>
+    </div>
+
+    <nav>
+        <a href="{% url 'subjects' %}" class="logo">
+            <i class="fas fa-shield-halved"></i> e-Maktab <span>PRO</span>
+        </a>
+        <div style="display: flex; gap: 15px;">
+            <a href="{% url 'subjects' %}" class="btn-back">
+                <i class="fas fa-house"></i> Bosh sahifa
+            </a>
+            <a href="{% url 'logout' %}" style="color: var(--danger); padding: 10px;"><i class="fas fa-power-off"></i></a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header-section">
+            <h1>Mening Natijalarim</h1>
+            <p style="color: var(--text-muted)">Foydalanuvchi: <span style="color: var(--secondary)">@{{ user.username }}</span></p>
+        </div>
+
+        <div class="stats-overview">
+            <div class="stat-card">
+                <span class="number">{{ results|length }}</span>
+                <span class="label">Topshirilgan Testlar</span>
+                <i class="fas fa-layer-group"></i>
+            </div>
+            <div class="stat-card">
+                <span class="number" style="color: var(--success);">{{ total_correct_sum|default:"0" }}</span>
+                <span class="label">To'g'ri Javoblar</span>
+                <i class="fas fa-check-double"></i>
+            </div>
+            <div class="stat-card">
+                <span class="number" style="color: var(--secondary);">{{ total_average_percentage|default:"0"|floatformat:1 }}%</span>
+                <span class="label">O'rtacha Ko'rsatkich</span>
+                <i class="fas fa-chart-pie"></i>
+            </div>
+        </div>
+
+        <div class="results-table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Fan nomi</th>
+                        <th>Tur</th>
+                        <th>Vaqt</th>
+                        <th>Natija</th>
+                        <th>Foiz</th>
+                        <th>Holat</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for res in results %}
+                    <tr style="animation: slideIn 0.5s ease forwards; opacity: 0; animation-delay: {{ forloop.counter0|add:0.1 }}s;">
+                        <td>{{ forloop.counter }}</td>
+                        <td>
+                            <div style="font-weight: 700;">{{ res.subject.name }}</div>
+                        </td>
+                        <td><span class="badge badge-info">{{ res.test_type|default:"Fan testi" }}</span></td>
+                        <td style="font-size: 13px; color: var(--text-muted);">
+                            {{ res.date_taken|date:"d.m.Y" }}<br>{{ res.date_taken|date:"H:i" }}
+                        </td>
+                        <td>
+                            <span style="color: var(--success); font-weight: 800;">{{ res.correct_count }}</span>
+                            <span style="color: var(--text-muted);"> / {{ res.total_questions|default:res.correct_count|add:res.wrong_count }}</span>
+                        </td>
+                        <td>
+                            <div style="font-weight: 800; color: #fff;">{{ res.score_percentage|floatformat:0 }}%</div>
+                            <div class="progress-mini">
+                                <div class="progress-bar" style="width: {{ res.score_percentage }}%; background: {% if res.score_percentage >= 60 %}var(--success){% else %}var(--danger){% endif %}; box-shadow: 0 0 10px {% if res.score_percentage >= 60 %}var(--success){% else %}var(--danger){% endif %};"></div>
+                            </div>
+                        </td>
+                        <td>
+                            {% if res.score_percentage >= 60 %}
+                                <span class="badge badge-success"><i class="fas fa-circle-check"></i> O'tdi</span>
+                            {% else %}
+                                <span class="badge badge-danger"><i class="fas fa-circle-xmark"></i> Yiqildi</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" style="text-align: center; padding: 50px; color: var(--text-muted);">
+                            <i class="fas fa-folder-open fa-3x" style="margin-bottom: 15px; opacity: 0.2;"></i>
+                            <p>Hozircha natijalar mavjud emas.</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <footer>
+        © 2026 e-Maktab PRO &bull; <span style="color: var(--secondary)">Yahyobek Edition</span>
+    </footer>
+
+    <style>
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+
+    <script>
+        // Sichqoncha harakati (parallax orb)
+        document.addEventListener('mousemove', (e) => {
+            const orbs = document.querySelectorAll('.orb');
+            const x = (e.clientX / window.innerWidth - 0.5) * 40;
+            const y = (e.clientY / window.innerHeight - 0.5) * 40;
+            orbs.forEach(orb => {
+                orb.style.transform = `translate(${x}px, ${y}px)`;
+            });
+        });
+    </script>
+</body>
+</html>

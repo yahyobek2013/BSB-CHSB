@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kirish | e-Maktab PRO</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --primary: #6366f1;
+            --secondary: #06b6d4;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --error: #f43f5e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-dark);
+            color: #f1f5f9;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* --- SPLASH SCREEN (YAHYOBEK) --- */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .splash-text {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 4rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, #fff, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 20px rgba(99, 102, 241, 0.5));
+            animation: splashAnim 1.5s ease-in-out forwards;
+            letter-spacing: 5px;
+        }
+
+        @keyframes splashAnim {
+            0% { transform: scale(0.8); opacity: 0; letter-spacing: 20px; }
+            50% { transform: scale(1.1); opacity: 1; letter-spacing: 5px; }
+            100% { transform: scale(1.2); opacity: 0; display: none; }
+        }
+
+        /* --- DINAMIK FON --- */
+        .bg-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 50% 50%, #1e293b 0%, #0f172a 100%);
+        }
+
+        .orb {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.1;
+            animation: floatOrb 20s infinite alternate;
+        }
+
+        @keyframes floatOrb {
+            from { transform: translate(-10%, -10%) scale(1); }
+            to { transform: translate(20%, 20%) scale(1.2); }
+        }
+
+        /* --- MAIN CONTENT (HIDDEN INITIALLY) --- */
+        #main-content {
+            opacity: 0;
+            transform: scale(0.95);
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .login-box {
+            background: var(--glass);
+            backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            padding: 50px 40px;
+            border-radius: 32px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+            background: linear-gradient(to right, #fff, var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+        }
+
+        /* --- FORMA --- */
+        .form-group { margin-bottom: 20px; }
+        
+        label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.2);
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(45deg, var(--primary), #4f46e5);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-top: 10px;
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.2);
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+
+        /* --- XATOLIK --- */
+        .error-msg {
+            background: rgba(244, 63, 94, 0.1);
+            color: var(--error);
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 0.9rem;
+            border: 1px solid rgba(244, 63, 94, 0.3);
+        }
+
+        .auth-options {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #94a3b8;
+        }
+
+        .auth-options a {
+            color: var(--secondary);
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        footer {
+            margin-top: 30px;
+            color: #64748b;
+            font-size: 0.8rem;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Yahyobek Splash Ekran -->
+    <div id="splash-screen">
+        <div class="splash-text">YAHYOBEK</div>
+    </div>
+
+    <!-- Animatsion Fon -->
+    <div class="bg-glow">
+        <div class="orb" style="background: var(--primary); top: 0; left: 0;"></div>
+        <div class="orb" style="background: var(--secondary); bottom: 0; right: 0;"></div>
+    </div>
+
+    <!-- Asosiy Kontent -->
+    <div id="main-content">
+        <div class="login-box">
+            <div style="text-align: center; margin-bottom: 10px; color: var(--primary);">
+                <i class="fas fa-shield-halved fa-3x"></i>
+            </div>
+            <h2>Tizimga Kirish</h2>
+
+            <form method="POST">
+                {% csrf_token %}
+
+                {% if form.errors %}
+                    <div class="error-msg">
+                        <i class="fas fa-circle-exclamation"></i> Login yoki parol noto'g'ri!
+                    </div>
+                {% endif %}
+
+                <div class="form-group">
+                    <label>Login</label>
+                    <input type="text" name="username" placeholder="Foydalanuvchi nomi" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Parol</label>
+                    <input type="password" name="password" placeholder="••••••••" required>
+                </div>
+
+                <button type="submit" class="btn-login">Kirish</button>
+            </form>
+
+            <div class="auth-options">
+                Profilingiz yo'qmi? <a href="{% url 'register' %}">Ro'yxatdan o'ting</a>
+            </div>
+        </div>
+
+        <footer>
+            © 2026 e-Maktab PRO &bull; <span style="color: var(--secondary)">Yahyobek Edition</span>
+        </footer>
+    </div>
+
+    <script>
+        // Splash ekran logikasi
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                const splash = document.getElementById('splash-screen');
+                const main = document.getElementById('main-content');
+                
+                // Splash ekranni yo'qotish
+                splash.style.display = 'none';
+                
+                // Asosiy kontentni ko'rsatish
+                main.style.opacity = '1';
+                main.style.transform = 'scale(1)';
+            }, 1500); // 1.5 soniya kutish
+        });
+
+        // Sichqoncha harakati
+        document.addEventListener('mousemove', (e) => {
+            const orbs = document.querySelectorAll('.orb');
+            const x = (e.clientX / window.innerWidth) * 30;
+            const y = (e.clientY / window.innerHeight) * 30;
+            orbs.forEach(orb => {
+                orb.style.transform = `translate(${x}px, ${y}px)`;
+            });
+        });
+    </script>
+</body>
+</html>
